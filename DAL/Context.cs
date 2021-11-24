@@ -6,6 +6,7 @@ namespace DAL
 {
     public class Context : DbContext
     {
+        public static string ConnectionString {get;} = "Server=(local);Database=EFC5A;Integrated Security=true";
 
         public Context()
         {
@@ -23,7 +24,7 @@ namespace DAL
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(local);Database=EFC5A;Integrated Security=true");
+                optionsBuilder.UseSqlServer(ConnectionString);
             }
         }
 
