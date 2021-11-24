@@ -13,6 +13,18 @@ namespace DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
+
+            //Konwertery
+
+            //builder.Property(x => x.OrderType).HasConversion<string>();
+            //builder.Property(x => x.OrderType).HasConversion(
+            //    x => x.ToString(),
+            //    x => (OrderTypes)Enum.Parse(typeof(OrderTypes), x));
+
+            builder.Property(x => x.OrderType).HasConversion(Converters.ToBase64Converter<OrderTypes>());
+
         }
+
+
     }
 }

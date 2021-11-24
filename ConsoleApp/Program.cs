@@ -125,10 +125,7 @@ namespace ConsoleApp
                     for (int ii = 0; ii < 5; ii++)
                     {
                         Product product = new Product();
-                        if (i % 2 == 0)
-                        {
                             product.Name = $"Product {i}";
-                        }
 
                         order.Products.Add(product);
                     }

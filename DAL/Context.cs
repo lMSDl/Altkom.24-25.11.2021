@@ -1,6 +1,7 @@
 ﻿using DAL.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 
 namespace DAL
 {
@@ -34,6 +35,23 @@ namespace DAL
             //modelBuilder.ApplyConfiguration(new ProductConfiguration());
             //modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductConfiguration).Assembly);
-        }
+
+
+            foreach (var property in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(x => x.GetProperties())
+                .Where(x => x.PropertyInfo?.PropertyType == typeof(string)))
+            {
+                property.SetMaxLength(50);
+                property.IsNullable = false;
+            }
+
+            foreach (var property in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(x => x.GetProperties())
+                .Where(x => x.PropertyInfo?.PropertyType == typeof(DateTime)))
+            {
+                property.SetColumnType("dateTime");
+            }
+
+        } 
     }
 }

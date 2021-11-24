@@ -10,6 +10,8 @@ namespace Models
     {
         public DateTime DateTime { get; set; }
 
+        public OrderTypes OrderType { get; set; }
+
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
