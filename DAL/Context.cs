@@ -7,7 +7,7 @@ namespace DAL
 {
     public class Context : DbContext
     {
-        public static string ConnectionString {get;} = "Server=(local);Database=EFC5A;Integrated Security=true";
+        public static string ConnectionString { get; } = "Server=(local);Database=EFC5A;Integrated Security=true";
 
         public Context()
         {
@@ -37,21 +37,30 @@ namespace DAL
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductConfiguration).Assembly);
 
 
-            foreach (var property in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(x => x.GetProperties())
-                .Where(x => x.PropertyInfo?.PropertyType == typeof(string)))
+
+            //foreach (Microsoft.EntityFrameworkCore.Metadata.IMutableProperty property in modelBuilder.Model.GetEntityTypes()
+            //    .SelectMany(x => x.GetProperties())
+            //    .Where(x => x.PropertyInfo?.Name == "Key").ToList())
+            //{
+            //    property.DeclaringEntityType.SetPrimaryKey(property);
+            //}
+
+
+            foreach (Microsoft.EntityFrameworkCore.Metadata.IMutableProperty property in modelBuilder.Model.GetEntityTypes()
+            .SelectMany(x => x.GetProperties())
+            .Where(x => x.PropertyInfo?.PropertyType == typeof(string)))
             {
                 property.SetMaxLength(50);
                 property.IsNullable = false;
             }
 
-            foreach (var property in modelBuilder.Model.GetEntityTypes()
+            foreach (Microsoft.EntityFrameworkCore.Metadata.IMutableProperty property in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(x => x.GetProperties())
                 .Where(x => x.PropertyInfo?.PropertyType == typeof(DateTime)))
             {
                 property.SetColumnType("dateTime");
             }
 
-        } 
+        }
     }
 }
