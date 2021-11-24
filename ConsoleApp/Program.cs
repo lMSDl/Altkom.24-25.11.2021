@@ -1,6 +1,7 @@
 ﻿using DAL;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 
@@ -12,8 +13,34 @@ namespace ConsoleApp
         {
             ChangeTracker();
             ConcurrencyToken();
+            Transactions();
+
+            Order order;
+
+            using (Context context = GetContext())
+            {
+                //EagerLoading - ładowanie wbudowane w zapytanie do bazy danych
+                //order = context.Set<Order>().Include(x => x.Products).First();
+
+                order = context.Set<Order>().First();
 
 
+                //ExplicitLoading - ładowanie w późniejszym czasie (na żądanie)
+                //context.Entry(order).Collection(x => x.Products).Load();
+
+                //ładowanie całej tabeli do kontekstu
+                //context.Set<Product>().Load();
+
+                //LazyLoading - ładowanie z opóźnieniem (w momencie użycia relacji)
+                Console.WriteLine(JsonConvert.SerializeObject(order, Formatting.Indented));
+            }
+
+
+
+        }
+
+        private static void Transactions()
+        {
             using (Context context = GetContext())
             {
                 Product product = context.Set<Product>().Find(3);
@@ -49,8 +76,6 @@ namespace ConsoleApp
                     }
                 }
             }
-
-
         }
 
         private static void ConcurrencyToken()
@@ -183,7 +208,10 @@ namespace ConsoleApp
 
         private static Context GetContext()
         {
-            return new Context(new DbContextOptionsBuilder().UseSqlServer(Context.ConnectionString).Options);
+            return new Context(new DbContextOptionsBuilder()
+                //LazyLoading - włączenie proxy
+                //.UseLazyLoadingProxies()
+                .UseSqlServer(Context.ConnectionString).Options);
         }
     }
 }
