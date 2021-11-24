@@ -1,26 +1,68 @@
 ﻿using DAL;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using System.Linq;
 using System;
+using System.Linq;
 
 namespace ConsoleApp
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             ChangeTracker();
+            ConcurrencyToken();
 
 
-            using (var context = GetContext())
+            using (Context context = GetContext())
             {
-                
-                    var product = context.Set<Product>().Find(3);
+                Product product = context.Set<Product>().Find(3);
 
-                    product.Price = 3.2f;
-                    DetectChanges(context);
-                var saved = false;
+                using (Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+
+                        product.Name = "Sałata";
+                        context.SaveChanges();
+
+                        transaction.CreateSavepoint("Savepoint1");
+
+                        product.Name = "Kapusta";
+                        context.SaveChanges();
+
+                        if (new Random().Next(0, 10) % 2 == 0)
+                        {
+                            throw new Exception();
+                        }
+
+                        product.Price = 13.2f;
+                        context.SaveChanges();
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.RollbackToSavepoint("Savepoint1");
+
+                        transaction.Commit();
+                    }
+                }
+            }
+
+
+        }
+
+        private static void ConcurrencyToken()
+        {
+            using (Context context = GetContext())
+            {
+
+                Product product = context.Set<Product>().Find(3);
+
+                product.Price = 3.2f;
+                DetectChanges(context);
+                bool saved = false;
                 while (!saved)
                 {
                     try
@@ -30,19 +72,19 @@ namespace ConsoleApp
                     }
                     catch (DbUpdateConcurrencyException e)
                     {
-                        foreach (var entry in e.Entries)
+                        foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry in e.Entries)
                         {
                             if (entry.Entity is Product)
                             {
                                 //Wartości jakie my wprowadziliśmy do encji (stan jaki próbowaliśmy zapisać)
-                                var currentValues = entry.CurrentValues;
+                                Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues currentValues = entry.CurrentValues;
                                 //Pobieramy wartości jakie są aktualnie w bazie danych
-                                var databaseValues = entry.GetDatabaseValues();
+                                Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues databaseValues = entry.GetDatabaseValues();
 
-                                foreach (var property in currentValues.Properties)
+                                foreach (Microsoft.EntityFrameworkCore.Metadata.IProperty property in currentValues.Properties)
                                 {
-                                    var currentValue = currentValues[property];
-                                    var databaseValue = databaseValues[property];
+                                    object currentValue = currentValues[property];
+                                    object databaseValue = databaseValues[property];
 
                                     //Przypisanie wartości, która ma się znaleźć w bazie danych
                                     currentValues[property] = databaseValue;
@@ -62,28 +104,32 @@ namespace ConsoleApp
                     }
                 }
             }
-
         }
 
         private static void ChangeTracker()
         {
-            using (var context = GetContext())
+            using (Context context = GetContext())
             {
                 context.Database.EnsureDeleted();
                 context.Database.Migrate();
 
                 for (int i = 0; i < 5; i++)
                 {
-                    var order = new Order();
-                    order.DateTime = DateTime.Now;
+                    Order order = new Order
+                    {
+                        DateTime = DateTime.Now
+                    };
 
                     context.Add(order);
 
                     for (int ii = 0; ii < 5; ii++)
                     {
-                        var product = new Product();
+                        Product product = new Product();
                         if (i % 2 == 0)
+                        {
                             product.Name = $"Product {i}";
+                        }
+
                         order.Products.Add(product);
                     }
 
@@ -95,10 +141,10 @@ namespace ConsoleApp
 
                 DetectChanges(context);
 
-                var localOrder = context.Set<Order>().Local.First();
+                Order localOrder = context.Set<Order>().Local.First();
                 localOrder.Products.ToList().ForEach(x => x.Price = 2.2f);
 
-                foreach (var localOrderProduct in localOrder.Products.Take(2))
+                foreach (Product localOrderProduct in localOrder.Products.Take(2))
                 {
                     Console.WriteLine($"{localOrderProduct.Name} - {localOrderProduct.Price}");
 
@@ -108,7 +154,7 @@ namespace ConsoleApp
 
                 }
 
-                foreach (var localOrderProduct in localOrder.Products.Skip(2).Take(1))
+                foreach (Product localOrderProduct in localOrder.Products.Skip(2).Take(1))
                 {
                     localOrderProduct.Name = $"{localOrderProduct.Name} - {localOrderProduct.Price}";
 
@@ -121,9 +167,9 @@ namespace ConsoleApp
                 context.SaveChanges();
             }
 
-            using (var context = GetContext())
+            using (Context context = GetContext())
             {
-                var products = context.Set<Product>().AsNoTracking().Take(3).ToList();
+                System.Collections.Generic.List<Product> products = context.Set<Product>().AsNoTracking().Take(3).ToList();
 
                 DetectChanges(context);
             }
