@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{BD9B6752-F096-47B3-830A-24FCD657B2A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{50257C00-6A7E-4815-84BA-FB356C642AE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{B77CD12B-D874-4C31-8FAC-237BB5886710}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD9B6752-F096-47B3-830A-24FCD657B2A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD9B6752-F096-47B3-830A-24FCD657B2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD9B6752-F096-47B3-830A-24FCD657B2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD9B6752-F096-47B3-830A-24FCD657B2A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50257C00-6A7E-4815-84BA-FB356C642AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50257C00-6A7E-4815-84BA-FB356C642AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50257C00-6A7E-4815-84BA-FB356C642AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50257C00-6A7E-4815-84BA-FB356C642AE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B77CD12B-D874-4C31-8FAC-237BB5886710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B77CD12B-D874-4C31-8FAC-237BB5886710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B77CD12B-D874-4C31-8FAC-237BB5886710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B77CD12B-D874-4C31-8FAC-237BB5886710}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0105EDA4-0B71-4463-953F-83C062F33B66}
+	EndGlobalSection
+EndGlobal
