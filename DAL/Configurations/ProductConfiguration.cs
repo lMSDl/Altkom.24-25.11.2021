@@ -13,6 +13,8 @@ namespace DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
+            builder.Property(x => x.Name).IsConcurrencyToken();
+            builder.Property(x => x.Timestamp).IsRowVersion();
         }
     }
 }

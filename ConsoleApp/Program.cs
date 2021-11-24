@@ -10,6 +10,63 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            ChangeTracker();
+
+
+            using (var context = GetContext())
+            {
+                
+                    var product = context.Set<Product>().Find(3);
+
+                    product.Price = 3.2f;
+                    DetectChanges(context);
+                var saved = false;
+                while (!saved)
+                {
+                    try
+                    {
+                        context.SaveChanges();
+                        saved = true;
+                    }
+                    catch (DbUpdateConcurrencyException e)
+                    {
+                        foreach (var entry in e.Entries)
+                        {
+                            if (entry.Entity is Product)
+                            {
+                                //Wartości jakie my wprowadziliśmy do encji (stan jaki próbowaliśmy zapisać)
+                                var currentValues = entry.CurrentValues;
+                                //Pobieramy wartości jakie są aktualnie w bazie danych
+                                var databaseValues = entry.GetDatabaseValues();
+
+                                foreach (var property in currentValues.Properties)
+                                {
+                                    var currentValue = currentValues[property];
+                                    var databaseValue = databaseValues[property];
+
+                                    //Przypisanie wartości, która ma się znaleźć w bazie danych
+                                    currentValues[property] = databaseValue;
+                                }
+
+                                DetectChanges(context);
+                                //Synchronizacja wartości początkowych (które modyfikowaliśmy na początku) do aktualnych wartości z bazy danych
+                                //w celu aktualizacji tokena współbieżności
+                                entry.OriginalValues.SetValues(databaseValues);
+                                DetectChanges(context);
+                            }
+                            else if (entry.Entity is Order)
+                            {
+                                //....
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private static void ChangeTracker()
+        {
             using (var context = GetContext())
             {
                 context.Database.EnsureDeleted();
@@ -66,7 +123,7 @@ namespace ConsoleApp
 
             using (var context = GetContext())
             {
-                var products = context.Set<Product>().AsNoTracking().Take(3).ToList() ;
+                var products = context.Set<Product>().AsNoTracking().Take(3).ToList();
 
                 DetectChanges(context);
             }
