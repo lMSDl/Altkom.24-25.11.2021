@@ -77,5 +77,28 @@ namespace DAL.Properties {
                 return ResourceManager.GetString("OrderSummary", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CREATE OR ALTER TRIGGER PRODUCT_Update ON Product
+        ///	AFTER UPDATE
+        ///AS
+        ///BEGIN
+        ///	SET NOCOUNT ON;
+        ///	DECLARE @Id int
+        ///
+        ///	SELECT @Id = INSERTED.Id
+        ///	FROM INSERTED
+        ///
+        ///	UPDATE Product
+        ///	SET Updated = GETDATE()
+        ///	WHERE @Id = Id
+        ///
+        ///END.
+        /// </summary>
+        public static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
+            }
+        }
     }
 }

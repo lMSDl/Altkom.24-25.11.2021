@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <None Remove="SQL\OrderSummary.sql" />
+    <None Remove="SQL\Updated.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="SQL\Updated.sql" />
     <EmbeddedResource Include="SQL\OrderSummary.sql" />
   </ItemGroup>
 
