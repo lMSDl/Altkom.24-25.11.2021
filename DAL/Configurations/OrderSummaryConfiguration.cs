@@ -13,8 +13,12 @@ namespace DAL.Configurations
     {
         public virtual void Configure(EntityTypeBuilder<OrderSummary> builder)
         {
+            builder.HasNoKey();
+
             //Nie tworzymy tabeli dla tej klasy
-            builder.ToTable(null);
+            //builder.ToTable(null);
+
+            builder.ToView("View_OrderSummary");
         }
 
 

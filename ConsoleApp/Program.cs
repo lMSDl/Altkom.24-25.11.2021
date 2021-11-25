@@ -23,6 +23,8 @@ namespace ConsoleApp
                 context.Database.ExecuteSqlInterpolated($"ChangePrice {2.5f}");
 
                 var orders = context.Set<OrderSummary>().FromSqlInterpolated($"OrderSummary {4}").ToList();
+
+                orders = context.Set<OrderSummary>().ToList();
             }
 
             }
