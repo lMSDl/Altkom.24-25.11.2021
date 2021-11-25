@@ -25,8 +25,9 @@ namespace ConsoleApp
 
                 //Aby skorzystać z wartości "Field-only property" możemy użyć klasy EF, ale tylko w zapytaniach Linq To Sql
                 order = context.Set<Order>()
-                    .Where(x => !EF.Property<bool>(x, "IsDeleted"))
-                    .Where(x => x.Products.Any(xx => EF.Property<int>(xx, "OrderId") >= 4))
+                    //Zastosowanie filtra globalnego
+                    //.Where(x => !EF.Property<bool>(x, "IsDeleted"))
+                    //.Where(x => x.Products.Any(xx => EF.Property<int>(xx, "OrderId") >= 4))
                     .Where(x => x.Products.Any(xx => EF.Property<int>(xx, "_daysToExpire") <= 5) ).First();
 
                 // W standardowym zapytaniu Linq otrzymamy błąd

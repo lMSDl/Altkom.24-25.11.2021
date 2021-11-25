@@ -19,6 +19,8 @@ namespace DAL.Configurations
             //builder.Property(x => x.Updated).ValueGeneratedOnAddOrUpdate();
 
             builder.Property<bool>("IsDeleted");
+
+            builder.HasQueryFilter(x => !EF.Property<bool>(x, "IsDeleted"));
         }
 
 

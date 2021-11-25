@@ -32,6 +32,9 @@ namespace DAL.Configurations
 
             //Domyślne ustawienie dla EF Core 5 to PreferField
             builder.Property(x => x.DisplayName).UsePropertyAccessMode(PropertyAccessMode.PreferProperty);
+
+
+            builder.HasQueryFilter(x => !EF.Property<bool>(x, "IsDeleted") && EF.Property<int>(x, "_daysToExpire") >= 0);
         }
     }
 }
