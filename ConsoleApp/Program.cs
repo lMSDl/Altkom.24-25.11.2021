@@ -14,7 +14,21 @@ namespace ConsoleApp
             ChangeTracker();
             ConcurrencyToken();
             Transactions();
+            Loading();
 
+
+            using (Context context = GetContext())
+            {
+                context.Database.ExecuteSqlRaw("ChangePrice @p0", 2);
+                context.Database.ExecuteSqlInterpolated($"ChangePrice {2.5f}");
+
+                var orders = context.Set<OrderSummary>().FromSqlInterpolated($"OrderSummary {4}").ToList();
+            }
+
+            }
+
+        private static void Loading()
+        {
             Order order;
 
             using (Context context = GetContext())
@@ -28,7 +42,7 @@ namespace ConsoleApp
                     //Zastosowanie filtra globalnego
                     //.Where(x => !EF.Property<bool>(x, "IsDeleted"))
                     //.Where(x => x.Products.Any(xx => EF.Property<int>(xx, "OrderId") >= 4))
-                    .Where(x => x.Products.Any(xx => EF.Property<int>(xx, "_daysToExpire") <= 5) ).First();
+                    .Where(x => x.Products.Any(xx => EF.Property<int>(xx, "_daysToExpire") <= 5)).First();
 
                 // W standardowym zapytaniu Linq otrzymamy błąd
                 //var products = order.Products.Where(x => EF.Property<int>(x, "_daysToExpire") <= 5).ToList();
@@ -42,9 +56,6 @@ namespace ConsoleApp
                 //LazyLoading - ładowanie z opóźnieniem (w momencie użycia relacji)
                 Console.WriteLine(JsonConvert.SerializeObject(order, Formatting.Indented));
             }
-
-
-
         }
 
         private static void Transactions()
