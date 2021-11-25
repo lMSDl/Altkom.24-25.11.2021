@@ -22,8 +22,11 @@ namespace ConsoleApp
                 //EagerLoading - ładowanie wbudowane w zapytanie do bazy danych
                 //order = context.Set<Order>().Include(x => x.Products).First();
 
-                order = context.Set<Order>().First();
 
+                //Aby skorzystać z wartości "Field-only property" możemy użyć klasy EF, ale tylko w zapytaniach Linq To Sql
+                order = context.Set<Order>().Where(x => x.Products.Any(xx => EF.Property<int>(xx, "_daysToExpire") <= 5) ).First();
+                // W standardowym zapytaniu Linq otrzymamy błąd
+                //var products = order.Products.Where(x => EF.Property<int>(x, "_daysToExpire") <= 5).ToList();
 
                 //ExplicitLoading - ładowanie w późniejszym czasie (na żądanie)
                 //context.Entry(order).Collection(x => x.Products).Load();

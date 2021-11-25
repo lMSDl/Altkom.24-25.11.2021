@@ -23,8 +23,15 @@ namespace DAL.Configurations
 
             builder.Property(x => x.DisplayName)
                 .HasComputedColumnSql("[Name] + ' ' + CONVERT(varchar, [Price]) + 'zł'", true);
-            builder.Property(x => x.DaysToExpire)
+            builder
+                //.Property(x => x.DaysToExpire)
+                //Możemy utworzyć "Field-only property" poprzez podanie nazwy pola
+                .Property("_daysToExpire")
+                .HasColumnName("DaysToExpire")
                 .HasComputedColumnSql($"DATEDIFF(DAY, GETDATE(), [{nameof(Product.ExpirationDate)}])");
+
+            //Domyślne ustawienie dla EF Core 5 to PreferField
+            builder.Property(x => x.DisplayName).UsePropertyAccessMode(PropertyAccessMode.PreferProperty);
         }
     }
 }
