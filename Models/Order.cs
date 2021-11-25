@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetTopologySuite.Geometries;
 
 namespace Models
 {
@@ -24,6 +25,8 @@ namespace Models
         public DateTime DateTime { get; set; }
 
         public OrderTypes OrderType { get; set; }
+
+        public Point DeliveryLocation { get; set; }
 
         //LazyLoading - wymaga właściwości wirtualnej
         //public virtual ICollection<Product> Products { get; set; } = new List<Product>();

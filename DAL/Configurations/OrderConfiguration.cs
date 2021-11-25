@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,10 @@ namespace DAL.Configurations
 
             builder.Property(x => x.OrderType).HasConversion(Converters.ToBase64Converter<OrderTypes>());
 
+            //builder.Property(x => x.DeliveryLocation)
+            //    .HasConversion(
+            //    x => new Point(x.Longitude, x.Latitude) { SRID = 4326 },
+            //    x => new Models.Location { Longitude = (float)x.X, Latitude = (float)x.Y });
         }
 
 

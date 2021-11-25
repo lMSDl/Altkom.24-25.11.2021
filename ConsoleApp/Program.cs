@@ -1,6 +1,7 @@
 ﻿using DAL;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -22,9 +23,23 @@ namespace ConsoleApp
                 context.Database.ExecuteSqlRaw("ChangePrice @p0", 2);
                 context.Database.ExecuteSqlInterpolated($"ChangePrice {2.5f}");
 
-                var orders = context.Set<OrderSummary>().FromSqlInterpolated($"OrderSummary {4}").ToList();
+                var orderSummary = context.Set<OrderSummary>().FromSqlInterpolated($"OrderSummary {4}").ToList();
 
-                orders = context.Set<OrderSummary>().ToList();
+                orderSummary = context.Set<OrderSummary>().ToList();
+
+                var orders = context.Set<Order>().Take(2).ToList();
+
+                orders[0].DeliveryLocation = new Point(53.2f, 25.8f) {SRID = 4326 };
+                orders[1].DeliveryLocation = new Point(25.8f, 53.2f) { SRID = 4326 };
+
+                context.SaveChanges();
+
+                var startpoint = new Point(0, 0f) { SRID = 4326 };
+                orders = context.Set<Order>().OrderBy(x => x.DeliveryLocation.Distance(startpoint)).ToList();
+
+                var test1 = context.Set<Order>().Where(x => x.DeliveryLocation != null).Select(x => x.DeliveryLocation.Distance(startpoint)).ToList();
+                var test2 = context.Set<Order>().Where(x => x.DeliveryLocation != null).ToList().Select(x => x.DeliveryLocation.Distance(startpoint)).ToList();
+
             }
 
             }
@@ -232,7 +247,8 @@ namespace ConsoleApp
             return new Context(new DbContextOptionsBuilder()
                 //LazyLoading - włączenie proxy
                 //.UseLazyLoadingProxies()
-                .UseSqlServer(Context.ConnectionString).Options);
+                .UseSqlServer(Context.ConnectionString, x => x.UseNetTopologySuite())
+                .Options);
         }
     }
 }

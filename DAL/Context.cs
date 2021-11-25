@@ -8,7 +8,7 @@ namespace DAL
 {
     public class Context : DbContext
     {
-        public static string ConnectionString { get; } = "Server=(local);Database=EFC5A;Integrated Security=true";
+        public static string ConnectionString { get; } = "Server=(local);Database=EFC5A2;Integrated Security=true";
 
         public Context()
         {
@@ -26,8 +26,9 @@ namespace DAL
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(ConnectionString);
+                optionsBuilder.UseSqlServer(ConnectionString, x=> x.UseNetTopologySuite());
             }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
