@@ -18,7 +18,8 @@ namespace DAL.Configurations
             builder.Property(x => x.Name).IsConcurrencyToken();
             builder.Property(x => x.Timestamp).IsRowVersion();
 
-            builder.Property(x => x.Price).HasDefaultValue(10);
+            //builder.Property(x => x.Price).HasDefaultValue(10);
+            builder.Property(x => x.Price).HasDefaultValueSql("NEXT VALUE FOR sequences.ProductPrice");
         }
     }
 }

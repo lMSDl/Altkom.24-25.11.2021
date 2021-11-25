@@ -61,6 +61,13 @@ namespace DAL
                 property.SetColumnType("dateTime");
             }
 
+            //Zadeklarowanie nowej sekwencji
+            modelBuilder.HasSequence<int>("ProductPrice", "sequences")
+                .StartsAt(10)
+                .HasMax(55)
+                .HasMin(3)
+                .IncrementsBy(4)
+                .IsCyclic();
         }
     }
 }
