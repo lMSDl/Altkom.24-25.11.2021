@@ -14,6 +14,7 @@ namespace Models
         public string Name { get; set;}
         public float Price { get; set; }
 
+        public string DisplayName { get; }
 
         //Konfigurujemy token współbieżności za pomocą sygnatury czasowej
         //[Timestamp]

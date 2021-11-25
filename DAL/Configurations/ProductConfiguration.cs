@@ -20,6 +20,9 @@ namespace DAL.Configurations
 
             //builder.Property(x => x.Price).HasDefaultValue(10);
             builder.Property(x => x.Price).HasDefaultValueSql("NEXT VALUE FOR sequences.ProductPrice");
+
+            builder.Property(x => x.DisplayName)
+                .HasComputedColumnSql("[Name] + ' ' + CONVERT(varchar, [Price]) + 'zł'", true);
         }
     }
 }
