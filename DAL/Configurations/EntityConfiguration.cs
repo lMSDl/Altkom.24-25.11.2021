@@ -17,6 +17,8 @@ namespace DAL.Configurations
             builder.Property(x => x.Created).HasDefaultValueSql("getdate()");
             //Generowanie wartości wbudowane w bazę danych (MS SQL nie posiada wsparcia do tego)
             //builder.Property(x => x.Updated).ValueGeneratedOnAddOrUpdate();
+
+            builder.Property<bool>("IsDeleted");
         }
 
 
