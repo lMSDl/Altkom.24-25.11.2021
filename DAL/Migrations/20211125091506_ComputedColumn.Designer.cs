@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20211125090308_ComputedColumn")]
+    [Migration("20211125091506_ComputedColumn")]
     partial class ComputedColumn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,12 +64,20 @@ namespace DAL.Migrations
                         .HasColumnType("dateTime")
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<int>("DaysToExpire")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("int")
+                        .HasComputedColumnSql("DATEDIFF(DAY, GETDATE(), [ExpirationDate])");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasComputedColumnSql("[Name] + ' ' + CONVERT(varchar, [Price]) + 'zł'", true);
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("dateTime");
 
                     b.Property<string>("Name")
                         .IsConcurrencyToken()

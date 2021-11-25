@@ -15,6 +15,8 @@ namespace Models
         public float Price { get; set; }
 
         public string DisplayName { get; }
+        public DateTime ExpirationDate { get; set; } = DateTime.Now.AddDays(5);
+        public int DaysToExpire { get; }
 
         //Konfigurujemy token współbieżności za pomocą sygnatury czasowej
         //[Timestamp]

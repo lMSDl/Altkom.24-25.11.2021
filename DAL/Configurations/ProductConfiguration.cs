@@ -23,6 +23,8 @@ namespace DAL.Configurations
 
             builder.Property(x => x.DisplayName)
                 .HasComputedColumnSql("[Name] + ' ' + CONVERT(varchar, [Price]) + 'zł'", true);
+            builder.Property(x => x.DaysToExpire)
+                .HasComputedColumnSql($"DATEDIFF(DAY, GETDATE(), [{nameof(Product.ExpirationDate)}])");
         }
     }
 }
