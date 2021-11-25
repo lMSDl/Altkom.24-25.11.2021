@@ -4,14 +4,16 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20211125093543_UpdateTime_1")]
+    partial class UpdateTime_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,11 +66,6 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
-
-                    b.Property<int>("DaysToExpire")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("int")
-                        .HasComputedColumnSql("DATEDIFF(DAY, GETDATE(), [ExpirationDate])");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()

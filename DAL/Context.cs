@@ -1,5 +1,6 @@
 ﻿using DAL.Configurations;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using System;
 using System.Linq;
 
@@ -54,12 +55,12 @@ namespace DAL
                 property.IsNullable = false;
             }
 
-            foreach (Microsoft.EntityFrameworkCore.Metadata.IMutableProperty property in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(x => x.GetProperties())
-                .Where(x => x.PropertyInfo?.PropertyType == typeof(DateTime)))
-            {
-                property.SetColumnType("dateTime");
-            }
+            //foreach (Microsoft.EntityFrameworkCore.Metadata.IMutableProperty property in modelBuilder.Model.GetEntityTypes()
+            //    .SelectMany(x => x.GetProperties())
+            //    .Where(x => x.PropertyInfo?.PropertyType == typeof(DateTime)))
+            //{
+            //    property.SetColumnType("dateTime");
+            //}
 
             //Zadeklarowanie nowej sekwencji
             modelBuilder.HasSequence<int>("ProductPrice", "sequences")
@@ -68,6 +69,18 @@ namespace DAL
                 .HasMin(3)
                 .IncrementsBy(4)
                 .IsCyclic();
+        }
+
+        public override int SaveChanges()
+        {
+            var now = DateTime.Now;
+            ChangeTracker.Entries<Entity>()
+                .Where(x => x.State == EntityState.Modified)
+                .Select(x => x.Entity)
+                .ToList()
+                .ForEach(x => x.Updated = now);
+
+            return base.SaveChanges();
         }
     }
 }
