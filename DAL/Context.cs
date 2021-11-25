@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DAL
@@ -9,6 +10,9 @@ namespace DAL
     public class Context : DbContext
     {
         public static string ConnectionString { get; } = "Server=(local);Database=EFC5A2;Integrated Security=true";
+
+        public static Func<Context, int, IEnumerable<Product>> GetProductsForOrder { get; } =
+            EF.CompileQuery((Context context, int id) => context.Set<Product>().Where(x => EF.Property<int>(x, "OrderId") == id));
 
         public Context()
         {

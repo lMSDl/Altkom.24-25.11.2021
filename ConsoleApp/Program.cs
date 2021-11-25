@@ -40,6 +40,7 @@ namespace ConsoleApp
                 var test1 = context.Set<Order>().Where(x => x.DeliveryLocation != null).Select(x => x.DeliveryLocation.Distance(startpoint)).ToList();
                 var test2 = context.Set<Order>().Where(x => x.DeliveryLocation != null).ToList().Select(x => x.DeliveryLocation.Distance(startpoint)).ToList();
 
+                var products = Context.GetProductsForOrder(context, 2);
             }
 
             }
